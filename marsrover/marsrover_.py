@@ -16,11 +16,17 @@ import os
 import requests
 import json
 import shutil
+import email_ui
 lst=[]
 count=0
 
 
 class Ui_MainWindow(object):
+    def email_window(self):
+        self.window=QtWidgets.QWidget()
+        self.ui=email_ui.Ui_Form()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def setupUi(self, MainWindow):
         self.index=1
@@ -142,6 +148,7 @@ class Ui_MainWindow(object):
         self.fetchbutton.clicked.connect(self.press_it)
         self.previous_button.clicked.connect(self.previous)
         self.Nextbutton.clicked.connect(self.next)
+        self.Sharebutton.clicked.connect(self.email_window)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -213,8 +220,6 @@ class Ui_MainWindow(object):
             print(self.index)
 
     def next(self):
-        global lst
-        if self.index <= len(lst):
             self.index += 1
             pixmap = QPixmap(f"images/photo{self.index}.jpg")
             self.label.setGeometry(2,250,1000,500)

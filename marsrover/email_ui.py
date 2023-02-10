@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import my_email
 
 
 class Ui_Form(object):
@@ -783,6 +784,12 @@ class Ui_Form(object):
         self.pushButton.setText(_translate("Form", "Send"))
         self.label.setText(_translate("Form", "Share it with your friends"))
 
+    def mail_data(self):
+        emails=self.textEdit.toPlainText().split('\n')
+        sub=self.lineEdit.text()
+        body=self.textEdit_2.toPlainText()
+        print(emails)
+        my_email.mail([emails,sub,body])
 
 if __name__ == "__main__":
     import sys
