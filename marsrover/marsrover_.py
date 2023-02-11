@@ -16,12 +16,13 @@ import os
 import requests
 import json
 import shutil
+import threading
 import email_ui
-lst=[]
 count=0
 
 
 class Ui_MainWindow(object):
+
     def email_window(self):
         self.window=QtWidgets.QWidget()
         self.ui=email_ui.Ui_Form()
@@ -107,7 +108,7 @@ class Ui_MainWindow(object):
         self.fetchbutton.setFont(font)
         self.fetchbutton.setObjectName("fetchbutton")
         self.previous_button = QtWidgets.QPushButton(self.centralwidget)
-        self.previous_button.setGeometry(QtCore.QRect(10, 890, 381, 41))
+        self.previous_button.setGeometry(QtCore.QRect(10, 800, 381, 41))
         font = QtGui.QFont()
         font.setFamily("Yrsa")
         font.setPointSize(21)
@@ -117,7 +118,7 @@ class Ui_MainWindow(object):
         self.previous_button.setFont(font)
         self.previous_button.setObjectName("previous_button")
         self.Nextbutton = QtWidgets.QPushButton(self.centralwidget)
-        self.Nextbutton.setGeometry(QtCore.QRect(410, 890, 411, 41))
+        self.Nextbutton.setGeometry(QtCore.QRect(410, 800, 411, 41))
         font = QtGui.QFont()
         font.setFamily("Yrsa")
         font.setPointSize(21)
@@ -127,7 +128,7 @@ class Ui_MainWindow(object):
         self.Nextbutton.setFont(font)
         self.Nextbutton.setObjectName("Nextbutton")
         self.Sharebutton=QtWidgets.QPushButton(self.centralwidget)
-        self.Sharebutton.setGeometry(QtCore.QRect(320,950,200,41))
+        self.Sharebutton.setGeometry(QtCore.QRect(320,850,200,41))
         font=QtGui.QFont()
         font.setFamily("Yrsa")
         font.setPointSize(21)
@@ -145,7 +146,7 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
-        self.fetchbutton.clicked.connect(self.press_it)
+        self.fetchbutton.clicked.connect(self.threading)
         self.previous_button.clicked.connect(self.previous)
         self.Nextbutton.clicked.connect(self.next)
         self.Sharebutton.clicked.connect(self.email_window)
@@ -188,11 +189,8 @@ class Ui_MainWindow(object):
         lst=[]
         response=requests.get(f"https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date={earth_date}&camera={camera}&date&api_key={demo_key}")
         data = json.loads(response.text)
-        pixmap = QPixmap("images/photo1.jpg")
-        # self.label.resize(pixmap.width(),pixmap.height())
-        # self.label.pixmap.scaled(-50,-50,Qt.keepAspectRatio,Qt.SmoothTransformation)
+        pixmap = QPixmap("images/photo1.png").scaled(500,500)
         self.label.setPixmap(pixmap)
-        # self.label.pixmap.Scaled(-50,-50,Qt.keepAspectRatio,Qt.SmoothTransformation)
         self.label.show()
 
         
@@ -205,35 +203,40 @@ class Ui_MainWindow(object):
             if count == 10:
                 break
             else:
-                with open(f"images/photo{count}.jpg",'wb') as f:
+                with open(f"images/photo{count}.png",'wb') as f:
                     shutil.copyfileobj(res.raw,f)
 
     def previous(self):
-        global lst
         if self.index>1:
             self.index -= 1
-            pixmap = QPixmap(f"images/photo{self.index}.jpg")
-            # self.label.resize(pixmap.width(),pixmap.height())
+            pixmap = QPixmap(f"images/photo{self.index}.png")
             self.label.setGeometry(2,250,1000,500)
             self.label.setPixmap(pixmap)
             self.label.show()
             print(self.index)
 
     def next(self):
-            self.index += 1
-            pixmap = QPixmap(f"images/photo{self.index}.jpg")
-            self.label.setGeometry(2,250,1000,500)
-            self.label.setPixmap(pixmap)
-            # self.label.resize(pixmap.width(),pixmap.height())
-            self.label.show()
-            print(self.index)
+        self.index += 1
+        if self.index ==10:
+            self.index -= 1
+        pixmap = QPixmap(f"images/photo{self.index}.png")
+        self.label.setGeometry(2,250,1000,500)
+        self.label.setPixmap(pixmap)
+        self.label.show()
+        print(self.index)
+    
+        
 
-            
+    def threading(self):
+        thread=threading.Thread(target=self.press_it)
+        thread.start()   
+
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
+    MainWindow.move(500,150)
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()

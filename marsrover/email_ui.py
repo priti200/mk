@@ -9,7 +9,9 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 import my_email
+import threading
 
 
 class Ui_Form(object):
@@ -772,6 +774,8 @@ class Ui_Form(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
 
+        self.pushButton.clicked.connect(self.thread_email)
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
@@ -790,6 +794,14 @@ class Ui_Form(object):
         body=self.textEdit_2.toPlainText()
         print(emails)
         my_email.mail([emails,sub,body])
+        message=QMessageBox()
+        message.setWindowTitle("Mailbox")
+        message.setText("Mail sent Successfully")
+
+    def thread_email(self):
+        thread=threading.Thread(target=self.mail_data) 
+        thread.start()
+
 
 if __name__ == "__main__":
     import sys

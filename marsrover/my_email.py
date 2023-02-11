@@ -3,42 +3,35 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 import smtplib, ssl
-import marsrover_
+import imghdr
+# import marsrover_
 
-def image(lst):
-    email_receiver=lst[0]
-    subject=lst[1]
+def mail(lst):
     email_sender='preeeet200@gmail.com'
     email_password='uwwanoyjebhsymll'
     # email_receiver='pg629343@gmail.com'
-    # subject="Hiii"
-    body="""
-    Share this image with your friends
-    """
 
-    em= MIMEMultipart()
-    em['From']=email_sender
-    em['To']=email_receiver
-    em['subject']="email with image attachment from  python"
-    em.set_content(lst[2])
-    text=MIMEText("This is a test email with an image attachment")
-    em.attach(text)
-    for i in img_src:
-        with open(i,"rb")as image:
-            image_data=image.read()
-            self.image_encoded=base64.b64encode(image_data)
-            image=MIMEImage(image_data)
-            message.attach(image)
 
-    server=smtplib.SMTP("smtp.gmail.com",465)
-    server.ehlo()
-    server.starttls()
-    server.login(email_receiver,email_password)
-    server.sendmail(email_sender,email_receiver,em.as_string())
-    server.quit()
+    message=EmailMessage()
 
-    context=ssl.create_default_context()
+    contacts=['pg629343@gmail.com','pritugupta2001@gmail.com']#multiple reciever
+    message['Subject']="Plain message 'Hare Krishna'"
+    message['From']=email_sender
+    message['To']=",".join(contacts)
 
-    with smtplib.SMTP_SSL('smtp.gmail.com',465,context=context) as smtp:
-        smtp.login(email_sender,email_password)
-        smtp.sendmail(email_sender,email_receiver,em.as_string())
+    message.set_content("we r sending some plain text email and attached some image")
+
+    try:
+        for i in range(1,10):
+            with open(f"images/photo{i}.png",'rb') as imeg:
+                file_data=imeg.read()
+                file_type=imghdr.what(imeg.name)
+                file_name=imeg.name
+            message.add_attachment(file_data,maintype='image',subtype = file_type,filename= file_name)
+
+    except FileNotFoundError:
+        pass
+
+    with smtplib.SMTP_SSL('smtp.gmail.com',465) as mail:
+        mail.login(email_sender,email_password)
+        mail.send_message(message)
