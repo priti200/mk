@@ -15,7 +15,7 @@ def mail(lst):
     message=EmailMessage()
 
     contacts=['pg629343@gmail.com','pritugupta2001@gmail.com']#multiple reciever
-    message['Subject']="Plain message 'Hare Krishna'"
+    message['Subject']="Mars Rover images"
     message['From']=email_sender
     message['To']=",".join(contacts)
 
