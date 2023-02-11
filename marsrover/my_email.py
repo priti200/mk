@@ -4,11 +4,14 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 import smtplib, ssl
 import imghdr
+import os
 # import marsrover_
+
+
 
 def mail(lst):
     email_sender='preeeet200@gmail.com'
-    email_password='uwwanoyjebhsymll'
+    email_password=os.getenv("Token")
     # email_receiver='pg629343@gmail.com'
 
 
