@@ -1,0 +1,25 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+  
+}
+// {
+//   "compilerOptions": {
+//     "jsx": "react-jsx",  // Enables automatic JSX runtime for React 17+
+//     "target": "ES6",     // Transpile to ES6
+//     "module": "ESNext",  // Use ESNext module system for modern bundlers
+//     "moduleResolution": "Node", 
+//     "strict": true,      // Enable all strict type-checking options
+//     "esModuleInterop": true,
+//     "skipLibCheck": true
+//   },
+//   "files": [],
+//   "references": [
+//     { "path": "./tsconfig.app.json" },
+//     { "path": "./tsconfig.node.json" }
+//   ]
+// }
+
